@@ -36,10 +36,10 @@ class SquadServer():
         Get map 
     '''
     def get_map(self):
+        self.get_stats() 
         return self.server_stats['data']['attributes']['details']['map']
 
     def reload_mapseed(self):
-        
         # Use method for actualize player
         self.get_countplayer()
         logging.info('============== INFORMATION SERVER =================')
@@ -47,17 +47,17 @@ class SquadServer():
         logging.info('MAP en cours sur le serveur : {0}'.format(self.get_map()))
 
         # If the count is equal to 0 
-        if self.server_countplayer == 0: 
+        if self.server_countplayer == 0 and 'Skirmish' not in self.get_map(): 
             logging.info('Le serveur est actuellement vide, redémarrage en cours pour une map SEED')
             os.system(self.command_execute)
         # Else the count is not equal to 0 
         else:
-            logging.info('Aucun reload seed est nécessaire.'.format(self.get_countplayer()))
+            logging.info('Aucun reload seed est nécessaire.')
     
 @click.command()
 @click.option('--url', prompt='L\'url battlemetric du server', help='Vous devez renseigner l\'url battlemetric du serveur')
 @click.option('--command', prompt='Commande à exécuter',help='La commande à utiliser pour relancer le serveur sur une map seed.')
-@click.option('--loglevel', help="Niveau de log pour le script --loglevel=INFO, --loglevel=DEBUG")
+@click.option('--loglevel', help="Niveau de log pour le script --loglevel=INFO, --loglevel=DEBUG", default='INFO')
 def main(url, command, loglevel):
     '''
         Configuraiton log. 
@@ -65,7 +65,7 @@ def main(url, command, loglevel):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
-    file_handler = RotatingFileHandler('squad_seedreload.log', 'a', 1000000, 1)
+    file_handler = RotatingFileHandler('seed-squad.log', 'a', 1000000, 1)
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
