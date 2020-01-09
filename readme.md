@@ -1,5 +1,3 @@
-``` Version : 0.1 ````
-
 # Objectif 
 Redémarrer le serveur si aucun joueur n'est présent et si le serveur n'est pas sur une map Skirmish (plus petite pour le seed). 
 
